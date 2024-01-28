@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import shuffle from './utilities/shuffle';
+import Card from './components/Card';
+
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [cards, setCards] = useState(shuffle); // creates card array from assets
+  const [pickOne, setPickOne] = useState(null); // First Card
+  const [pickTwo, setPickTwo] = useState(null); // Second Card
+  const [disabled, setDisabled] = useState(null); // Delay handler
+  const [wins, setWins] = useState(0); // Delay handler
+
+  // Handle card selection
+  const handleClick = (card) => {
+    //if clicking is not disabled
+    if (!disabled) {
+      // if pickOne is set, setPickTwo, otherwise setPickOne
+      pickOne ? setPickTwo(card) : setPickOne(card);
+    }
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="grid">
+        {cards.map((card) => {
+          const { image, id, matched } = card;
+          return <Card key={id} image={image} selected={false} />;
+        })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
